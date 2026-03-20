@@ -1,0 +1,164 @@
+[
+  {
+    "name": "Kigali Jazz Junction",
+    "type": "Music",
+    "city": "Kigali",
+    "budget": "Low",
+    "noise": "High",
+    "min_age": 16,
+    "description": "Live jazz and Afrobeat bands every Friday at Inema Arts Center"
+  },
+  {
+    "name": "Sundowner Karaoke Night",
+    "type": "Music",
+    "city": "Kigali",
+    "budget": "Medium",
+    "noise": "High",
+    "min_age": 18,
+    "description": "Weekly karaoke sessions at Sundowner Bar with themed nights"
+  },
+  {
+    "name": "Board Game Brunch",
+    "type": "Games",
+    "city": "Kigali",
+    "budget": "Low",
+    "noise": "Low",
+    "min_age": 15,
+    "description": "Saturday morning board games and coffee at Question Coffee"
+  },
+  {
+    "name": "Bowling at Planet Game",
+    "type": "Games",
+    "city": "Kigali",
+    "budget": "Medium",
+    "noise": "Medium",
+    "min_age": 12,
+    "description": "Ten-pin bowling, pool tables, and arcade games at Kigali City Tower"
+  },
+  {
+    "name": "Cinema Night at Century",
+    "type": "Movies",
+    "city": "Kigali",
+    "budget": "Medium",
+    "noise": "Low",
+    "min_age": 13,
+    "description": "Latest blockbusters and indie films at Century Cinema, Kigali Heights"
+  },
+  {
+    "name": "Rooftop Watch Party",
+    "type": "Movies",
+    "city": "Kigali",
+    "budget": "Low",
+    "noise": "Low",
+    "min_age": 16,
+    "description": "Outdoor movie screenings on a rooftop in Kiyovu with popcorn and blankets"
+  },
+  {
+    "name": "Kigali Food Festival",
+    "type": "Food & Drinks",
+    "city": "Kigali",
+    "budget": "Medium",
+    "noise": "Medium",
+    "min_age": 12,
+    "description": "Monthly street food market at Car Free Zone featuring local and fusion cuisine"
+  },
+  {
+    "name": "Happy Hour at The Hut",
+    "type": "Food & Drinks",
+    "city": "Kigali",
+    "budget": "Low",
+    "noise": "Medium",
+    "min_age": 18,
+    "description": "Weekday happy hour deals on cocktails and brochettes in Kimihurura"
+  },
+  {
+    "name": "Wine Tasting Evening",
+    "type": "Food & Drinks",
+    "city": "Kigali",
+    "budget": "High",
+    "noise": "Low",
+    "min_age": 21,
+    "description": "Guided wine tasting with cheese pairings at Kigali Marriott"
+  },
+  {
+    "name": "Nyama Mama Nairobi",
+    "type": "Food & Drinks",
+    "city": "Nairobi",
+    "budget": "Medium",
+    "noise": "Medium",
+    "min_age": 16,
+    "description": "Modern African kitchen and cocktail bar in Westlands"
+  },
+  {
+    "name": "Blankets and Wine",
+    "type": "Music",
+    "city": "Nairobi",
+    "budget": "Medium",
+    "noise": "High",
+    "min_age": 18,
+    "description": "Monthly outdoor music festival featuring live bands and DJs at Ngong Racecourse"
+  },
+  {
+    "name": "Alchemist Open Mic",
+    "type": "Music",
+    "city": "Nairobi",
+    "budget": "Low",
+    "noise": "Medium",
+    "min_age": 18,
+    "description": "Open mic and live performance nights at The Alchemist Bar, Westlands"
+  },
+  {
+    "name": "IMAX Movie Experience",
+    "type": "Movies",
+    "city": "Nairobi",
+    "budget": "High",
+    "noise": "Low",
+    "min_age": 13,
+    "description": "Premium IMAX screenings at Garden City Mall cinema"
+  },
+  {
+    "name": "Nairobi Street Food Tour",
+    "type": "Food & Drinks",
+    "city": "Nairobi",
+    "budget": "Low",
+    "noise": "Medium",
+    "min_age": 15,
+    "description": "Guided walking tour through the best street food spots in the CBD"
+  },
+  {
+    "name": "Laser Tag Arena",
+    "type": "Games",
+    "city": "Nairobi",
+    "budget": "Medium",
+    "noise": "High",
+    "min_age": 14,
+    "description": "Indoor laser tag battles and VR gaming at Village Market"
+  },
+  {
+    "name": "Trivia Tuesday",
+    "type": "Games",
+    "city": "Nairobi",
+    "budget": "Low",
+    "noise": "Medium",
+    "min_age": 18,
+    "description": "Weekly pub quiz night at Brew Bistro with prizes for winning teams"
+  },
+  {
+    "name": "Outdoor Dance Fitness",
+    "type": "Music",
+    "city": "Kigali",
+    "budget": "Low",
+    "noise": "High",
+    "min_age": 15,
+    "description": "Free Saturday morning dance workout sessions at Kigali Convention Centre grounds"
+  },
+  {
+    "name": "Documentary Watch Party",
+    "type": "Movies",
+    "city": "Nairobi",
+    "budget": "Low",
+    "noise": "Low",
+    "min_age": 16,
+    "description": "Bi-weekly documentary screenings and discussions at Goethe-Institut Nairobi"
+  }
+]
