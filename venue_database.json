@@ -6,7 +6,8 @@
     "budget": "Low",
     "noise": "High",
     "min_age": 16,
-    "description": "Live jazz and Afrobeat bands every Friday at Inema Arts Center"
+    "description": "Live jazz and Afrobeat bands every Friday at Inema Arts Center",
+    "ratings": []
   },
   {
     "name": "Sundowner Karaoke Night",
@@ -15,7 +16,8 @@
     "budget": "Medium",
     "noise": "High",
     "min_age": 18,
-    "description": "Weekly karaoke sessions at Sundowner Bar with themed nights"
+    "description": "Weekly karaoke sessions at Sundowner Bar with themed nights",
+    "ratings": []
   },
   {
     "name": "Board Game Brunch",
@@ -24,7 +26,8 @@
     "budget": "Low",
     "noise": "Low",
     "min_age": 15,
-    "description": "Saturday morning board games and coffee at Question Coffee"
+    "description": "Saturday morning board games and coffee at Question Coffee",
+    "ratings": []
   },
   {
     "name": "Bowling at Planet Game",
@@ -33,7 +36,8 @@
     "budget": "Medium",
     "noise": "Medium",
     "min_age": 12,
-    "description": "Ten-pin bowling, pool tables, and arcade games at Kigali City Tower"
+    "description": "Ten-pin bowling, pool tables, and arcade games at Kigali City Tower",
+    "ratings": []
   },
   {
     "name": "Cinema Night at Century",
@@ -42,7 +46,8 @@
     "budget": "Medium",
     "noise": "Low",
     "min_age": 13,
-    "description": "Latest blockbusters and indie films at Century Cinema, Kigali Heights"
+    "description": "Latest blockbusters and indie films at Century Cinema, Kigali Heights",
+    "ratings": []
   },
   {
     "name": "Rooftop Watch Party",
@@ -51,7 +56,8 @@
     "budget": "Low",
     "noise": "Low",
     "min_age": 16,
-    "description": "Outdoor movie screenings on a rooftop in Kiyovu with popcorn and blankets"
+    "description": "Outdoor movie screenings on a rooftop in Kiyovu with popcorn and blankets",
+    "ratings": []
   },
   {
     "name": "Kigali Food Festival",
@@ -60,7 +66,8 @@
     "budget": "Medium",
     "noise": "Medium",
     "min_age": 12,
-    "description": "Monthly street food market at Car Free Zone featuring local and fusion cuisine"
+    "description": "Monthly street food market at Car Free Zone featuring local and fusion cuisine",
+    "ratings": []
   },
   {
     "name": "Happy Hour at The Hut",
@@ -69,7 +76,8 @@
     "budget": "Low",
     "noise": "Medium",
     "min_age": 18,
-    "description": "Weekday happy hour deals on cocktails and brochettes in Kimihurura"
+    "description": "Weekday happy hour deals on cocktails and brochettes in Kimihurura",
+    "ratings": []
   },
   {
     "name": "Wine Tasting Evening",
@@ -78,7 +86,8 @@
     "budget": "High",
     "noise": "Low",
     "min_age": 21,
-    "description": "Guided wine tasting with cheese pairings at Kigali Marriott"
+    "description": "Guided wine tasting with cheese pairings at Kigali Marriott",
+    "ratings": []
   },
   {
     "name": "Nyama Mama Nairobi",
@@ -87,7 +96,8 @@
     "budget": "Medium",
     "noise": "Medium",
     "min_age": 16,
-    "description": "Modern African kitchen and cocktail bar in Westlands"
+    "description": "Modern African kitchen and cocktail bar in Westlands",
+    "ratings": []
   },
   {
     "name": "Blankets and Wine",
@@ -96,7 +106,8 @@
     "budget": "Medium",
     "noise": "High",
     "min_age": 18,
-    "description": "Monthly outdoor music festival featuring live bands and DJs at Ngong Racecourse"
+    "description": "Monthly outdoor music festival featuring live bands and DJs at Ngong Racecourse",
+    "ratings": []
   },
   {
     "name": "Alchemist Open Mic",
@@ -105,7 +116,8 @@
     "budget": "Low",
     "noise": "Medium",
     "min_age": 18,
-    "description": "Open mic and live performance nights at The Alchemist Bar, Westlands"
+    "description": "Open mic and live performance nights at The Alchemist Bar, Westlands",
+    "ratings": []
   },
   {
     "name": "IMAX Movie Experience",
@@ -114,7 +126,8 @@
     "budget": "High",
     "noise": "Low",
     "min_age": 13,
-    "description": "Premium IMAX screenings at Garden City Mall cinema"
+    "description": "Premium IMAX screenings at Garden City Mall cinema",
+    "ratings": []
   },
   {
     "name": "Nairobi Street Food Tour",
@@ -123,7 +136,8 @@
     "budget": "Low",
     "noise": "Medium",
     "min_age": 15,
-    "description": "Guided walking tour through the best street food spots in the CBD"
+    "description": "Guided walking tour through the best street food spots in the CBD",
+    "ratings": []
   },
   {
     "name": "Laser Tag Arena",
@@ -132,7 +146,8 @@
     "budget": "Medium",
     "noise": "High",
     "min_age": 14,
-    "description": "Indoor laser tag battles and VR gaming at Village Market"
+    "description": "Indoor laser tag battles and VR gaming at Village Market",
+    "ratings": []
   },
   {
     "name": "Trivia Tuesday",
@@ -141,7 +156,8 @@
     "budget": "Low",
     "noise": "Medium",
     "min_age": 18,
-    "description": "Weekly pub quiz night at Brew Bistro with prizes for winning teams"
+    "description": "Weekly pub quiz night at Brew Bistro with prizes for winning teams",
+    "ratings": []
   },
   {
     "name": "Outdoor Dance Fitness",
@@ -150,7 +166,8 @@
     "budget": "Low",
     "noise": "High",
     "min_age": 15,
-    "description": "Free Saturday morning dance workout sessions at Kigali Convention Centre grounds"
+    "description": "Free Saturday morning dance workout sessions at Kigali Convention Centre grounds",
+    "ratings": []
   },
   {
     "name": "Documentary Watch Party",
@@ -159,6 +176,7 @@
     "budget": "Low",
     "noise": "Low",
     "min_age": 16,
-    "description": "Bi-weekly documentary screenings and discussions at Goethe-Institut Nairobi"
+    "description": "Bi-weekly documentary screenings and discussions at Goethe-Institut Nairobi",
+    "ratings": []
   }
 ]
