@@ -29,6 +29,11 @@ def get_recommendations(profile, preferences, events):
             continue
         if event["min_age"] > profile["age"]:
             continue
+        if (
+            "preferred_times" in preferences
+            and event["time"] not in preferences["preferred_times"]
+        ):
+            continue
         results.append(event)
     if len(results) == 0:
         print(

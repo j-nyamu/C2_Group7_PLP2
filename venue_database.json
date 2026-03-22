@@ -7,6 +7,7 @@
     "noise": "High",
     "min_age": 16,
     "description": "Live jazz and Afrobeat bands every Friday at Inema Arts Center",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -17,6 +18,7 @@
     "noise": "High",
     "min_age": 18,
     "description": "Weekly karaoke sessions at Sundowner Bar with themed nights",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -27,6 +29,7 @@
     "noise": "Low",
     "min_age": 15,
     "description": "Saturday morning board games and coffee at Question Coffee",
+    "time": "Morning",
     "ratings": []
   },
   {
@@ -37,6 +40,7 @@
     "noise": "Medium",
     "min_age": 12,
     "description": "Ten-pin bowling, pool tables, and arcade games at Kigali City Tower",
+    "time": "Afternoon",
     "ratings": []
   },
   {
@@ -47,6 +51,7 @@
     "noise": "Low",
     "min_age": 13,
     "description": "Latest blockbusters and indie films at Century Cinema, Kigali Heights",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -57,6 +62,7 @@
     "noise": "Low",
     "min_age": 16,
     "description": "Outdoor movie screenings on a rooftop in Kiyovu with popcorn and blankets",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -67,6 +73,7 @@
     "noise": "Medium",
     "min_age": 12,
     "description": "Monthly street food market at Car Free Zone featuring local and fusion cuisine",
+    "time": "Afternoon",
     "ratings": []
   },
   {
@@ -77,6 +84,7 @@
     "noise": "Medium",
     "min_age": 18,
     "description": "Weekday happy hour deals on cocktails and brochettes in Kimihurura",
+    "time": "Afternoon",
     "ratings": []
   },
   {
@@ -87,6 +95,7 @@
     "noise": "Low",
     "min_age": 21,
     "description": "Guided wine tasting with cheese pairings at Kigali Marriott",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -97,6 +106,7 @@
     "noise": "Medium",
     "min_age": 16,
     "description": "Modern African kitchen and cocktail bar in Westlands",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -107,6 +117,7 @@
     "noise": "High",
     "min_age": 18,
     "description": "Monthly outdoor music festival featuring live bands and DJs at Ngong Racecourse",
+    "time": "Afternoon",
     "ratings": []
   },
   {
@@ -117,6 +128,7 @@
     "noise": "Medium",
     "min_age": 18,
     "description": "Open mic and live performance nights at The Alchemist Bar, Westlands",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -127,6 +139,7 @@
     "noise": "Low",
     "min_age": 13,
     "description": "Premium IMAX screenings at Garden City Mall cinema",
+    "time": "Afternoon",
     "ratings": []
   },
   {
@@ -137,6 +150,7 @@
     "noise": "Medium",
     "min_age": 15,
     "description": "Guided walking tour through the best street food spots in the CBD",
+    "time": "Morning",
     "ratings": []
   },
   {
@@ -147,6 +161,7 @@
     "noise": "High",
     "min_age": 14,
     "description": "Indoor laser tag battles and VR gaming at Village Market",
+    "time": "Afternoon",
     "ratings": []
   },
   {
@@ -157,6 +172,7 @@
     "noise": "Medium",
     "min_age": 18,
     "description": "Weekly pub quiz night at Brew Bistro with prizes for winning teams",
+    "time": "Evening",
     "ratings": []
   },
   {
@@ -167,6 +183,7 @@
     "noise": "High",
     "min_age": 15,
     "description": "Free Saturday morning dance workout sessions at Kigali Convention Centre grounds",
+    "time": "Morning",
     "ratings": []
   },
   {
@@ -177,6 +194,7 @@
     "noise": "Low",
     "min_age": 16,
     "description": "Bi-weekly documentary screenings and discussions at Goethe-Institut Nairobi",
+    "time": "Evening",
     "ratings": []
   }
 ]
