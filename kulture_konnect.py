@@ -7,7 +7,7 @@ import preference_menu
 def main():
     print("Welcome to Kulture Konnect!")
     print("Let's start by creating your profile.")
-    # Here you would call a function to create the user profile (not implemented yet)
+    # Devis to add block
     # profile = create_profile()
 
     print("\nNow, let's set your preferences.")
@@ -26,6 +26,8 @@ def main():
             "\nNo events matched your preferences. Please broaden your search preferences."
         )
 
+
+# NG: This will on ly run if this file is executed directly, not when imported as a module in another file.
 
 if __name__ == "__main__":
     main()
