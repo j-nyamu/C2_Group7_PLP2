@@ -23,9 +23,7 @@ def get_recommendations(profile, preferences, events):
             continue
         if not budget_fits(event["budget"], profile["budget"]):
             continue
-        if (
-            event["type"] not in preferences["activity_types"]
-        ):  # Confirm with Karyna's code
+        if event["type"] not in preferences["activity"]:  # Confirm with Karyna's code
             continue
         if event["min_age"] > profile["age"]:
             continue
@@ -34,7 +32,18 @@ def get_recommendations(profile, preferences, events):
             and event["time"] not in preferences["preferred_times"]
         ):
             continue
+
+    def avg_rating(event):
+        ratings = event.get("ratings", {})
+        if isinstance(ratings, dict) and ratings:
+            vals = list(ratings.values())
+            return sum(vals) / len(vals)
+        return 0
+        results.sort(
+            key=avg_rating, reverse=True
+        )  # Sort by average rating, highest first
         results.append(event)
+
     if len(results) == 0:
         print(
             "No events matched your preferences. Please broaden your search preferences"
