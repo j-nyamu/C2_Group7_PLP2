@@ -47,6 +47,8 @@ def main():
         print("  Consider choosing a higher budget or a different time of day and try again.")
     print("=" * 45)
 
+    # -- Step 6: Post Recommendation Actions ------------------------------------
+
 
 if __name__ == "__main__":
     main()
