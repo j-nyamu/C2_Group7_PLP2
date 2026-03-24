@@ -3,5 +3,13 @@
   "age": 28,
   "gender": "Male",
   "budget": "Medium",
-  "city": "Kigali"
+  "city": "Kigali",
+  "actions": {
+    "Itinerary": [
+      {
+        "event": "Rooftop Watch Party",
+        "timestamp": "2026-03-24 04:12:29"
+      }
+    ]
+  }
 }
