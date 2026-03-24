@@ -50,7 +50,7 @@ def main():
     print("\033[0m")
 
     # -- Step 6: Post Recommendation Actions ------------------------------------
-    post_actions.show_post_actions_menu(matches)
+    post_actions.show_post_actions_menu(matches, pfile)
 
 
 
