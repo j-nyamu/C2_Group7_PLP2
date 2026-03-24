@@ -31,7 +31,7 @@ def main():
     # -- Step 5: Filter and display results ------------------------------------
     matches = recommender.get_recommendations(user_profile, preferences, events)
 
-    print("\n" + "=" * 45)
+    print("\n\033[32m" + "=" * 45)
     if matches:
         print(f"  We found {len(matches)} event(s) just for you, {user_profile['name']}!\n")
         for i, match in enumerate(matches, start=1):
@@ -47,6 +47,7 @@ def main():
         print(f"  We could not find any events that match your current preferences, {user_profile['name']}.")
         print("  Consider choosing a higher budget or a different time of day and try again.")
     print("=" * 45)
+    print("\033[0m")
 
     # -- Step 6: Post Recommendation Actions ------------------------------------
     post_actions.show_post_actions_menu(matches)

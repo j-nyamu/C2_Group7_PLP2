@@ -7,7 +7,7 @@ def show_post_actions_menu(matches):
     
     #PART 1 - SELECT AN EVENT
 
-    print("\nChoose your preferred activity")
+    print("\nChoose your preferred activity\n\n")
     for i, event in enumerate(matches, start=1):
         print(f" {i}. {event['name']} ({event['type']})")
     
@@ -22,7 +22,7 @@ def show_post_actions_menu(matches):
         except ValueError:
             print("  Please enter a valid number.")
 
-    print(f"\n  --- Selected: {selected_event['name']} ---")
+    print(f"\n\033[32m  --- Selected: {selected_event['name']} ---\033[0m\n")
 
     #PART 2 - SHOW ACTION MENU
     print("  1. Schedule an Itinerary")
@@ -30,7 +30,7 @@ def show_post_actions_menu(matches):
     print("  3. Buy Tickets")
     print("  4. Return to Main Menu")
     while True:
-        action = input("\n  Enter your action choice (1-4): ").strip()
+        action = input("\n  Enter your action choice (1-4): \n").strip()
         if action == "1":
             handle_itinerary(selected_event)
             break
@@ -47,12 +47,15 @@ def show_post_actions_menu(matches):
             print("  Invalid choice.")
 
 def handle_itinerary(event):
-    print(f"\n  [Action] {event['name']} has been added to your itinerary!")
+    print(f"\n\033[32m  [Action] {event['name']} has been added to your itinerary!\n\033[0m")
+    print("\033[32mThank you for using KultureKonnect! \033[0m \n\n")
 
 def handle_reservation(event):
-    print(f"\n  [Action] Reservation confirmed for {event['name']}.")
+    print(f"\n\033[32m  [Action] Reservation confirmed for {event['name']}.\n\033[0m")
+    print("\033[32mThank you for using KultureKonnect! \033[0m \n\n")
 
 def handle_tickets(event):
-    print(f"\n  [Action] You've successfully bought tickets for {event['name']}!")
+    print(f"\n\033[32m  [Action] You've successfully bought tickets for {event['name']}!\n\033[0m")
+    print("\033[32mThank you for using KultureKonnect! \033[0m \n\n")
 
         
