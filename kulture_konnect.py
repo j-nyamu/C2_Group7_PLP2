@@ -3,6 +3,7 @@ import auth
 import recommender
 import preference_menu
 import profile
+import post_actions
 
 
 def main():
@@ -48,6 +49,8 @@ def main():
     print("=" * 45)
 
     # -- Step 6: Post Recommendation Actions ------------------------------------
+    post_actions.show_post_actions_menu(matches)
+
 
 
 if __name__ == "__main__":
