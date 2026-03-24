@@ -132,3 +132,13 @@ def get_or_create_profile(username, profile_file):
         user_profile = create_profile(profile_file)
 
     return user_profile
+
+# -- Saving profile --------------------------------------------------------
+
+def save_profile(profile_file, user_profile):
+    # Write user_profile dictionary back to the profile_file JSON 
+    try:
+        with open(profile_file, "w") as f:
+            json.dump(user_profile, f, indent=2)
+    except OSError as e:
+        print(f"  WARNING: Could not save profile: {e}")
