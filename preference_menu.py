@@ -18,20 +18,7 @@ def pick_from_menu(prompt, options):
     # -- Main Menu & preferences functions -------------------------------------------------
 
 
-def load_main_menu():
-    print("\n" + "=" * 45)
-    print("          MAIN MENU")
-    print("=" * 45)
-    print("  What would you like to do today.\n")
-    print("  1. Set your preferences")
-    print("  2. Rate past attended events")
-    print("  3. Exit")
-
-    while True:
-        choice = input("\n Enter your choice (1-3): ").strip()
-        if choice in ("1", "2", "3"):
-            return choice
-        print(" Invalid choice. Please enter 1, 2 or 3")
+# Karyna to add function here
 
 
 def get_preferences():
