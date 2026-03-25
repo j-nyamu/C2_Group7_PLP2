@@ -7,18 +7,21 @@ The database name must match the MySQL database you created (PLP2).
 """
 
 import mysql.connector
+import os
 
-DB_CONFIG = {
-    "host": "mysql-5d3ad6b-alustudent-5222.e.aivencloud.com",
-    "port": 15467,  # <-- replace with the port shown in your Aiven console
-    "user": "avnadmin",
-    "password": "REDACTED_SECRET",
-    "database": "defaultdb",
-    "ssl_disabled": False,
-    "ssl_ca": "ca.pem",
-    "ssl_verify_cert": True,
-    "ssl_verify_identity": True,
-}
+
+def _env_bool(name, default=False):
+    DB_CONFIG = {
+        "host": os.getenv("DB_HOST", "localhost"),
+        "port": int(os.getenv("DB_PORT", "3306")),
+        "user": os.getenv("DB_USER", ""),
+        "password": os.getenv("DB_PASSWORD", ""),
+        "database": os.getenv("DB_NAME", "defaultdb"),
+        "ssl_disabled": _env_bool("DB_SSL_DISABLED", False),
+        "ssl_ca": os.getenv("DB_SSL_CA", "ca.pem"),
+        "ssl_verify_cert": _env_bool("DB_SSL_VERIFY_CERT", True),
+        "ssl_verify_identity": _env_bool("DB_SSL_VERIFY_IDENTITY", True),
+    }
 
 
 def get_connection():
