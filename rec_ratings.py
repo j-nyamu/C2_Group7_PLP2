@@ -3,50 +3,81 @@ from db import get_connection
 
 
 def save_events_rating(current_user_id):
-
-    # Prompt the user for an event name and rating, then save to the database.
-    # current_user_id: the integer id of the logged-in user (from users table).
-    # One rating per user per venue; re-rating overwrites the previous value.
-
-    event_name = input("Enter event name: ").strip()
-    rating = input("Enter rating (1-10): ").strip()
-
-    if not rating.isdigit() or not (1 <= int(rating) <= 10):
-        print("Invalid rating. Please enter a number between 1 and 10.")
-        return
-
-    rating = int(rating)
+    """
+    Show venues attended by this user and allow rating one of them.
+    One rating per user per venue; re-rating overwrites the previous value.
+    """
+    conn = None
+    cursor = None
 
     try:
         conn = get_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
 
-        # Look up venue by name (case-insensitive)
+        # Pull only venues this user has actually attended via saved actions.
         cursor.execute(
-            "SELECT id, name FROM venues WHERE LOWER(name) = LOWER(%s)",
-            (event_name,),
+            """
+            SELECT v.id,
+                   v.name,
+                   MAX(ua.timestamp) AS last_attended,
+                   COUNT(*)          AS times_attended
+            FROM user_actions ua
+            JOIN venues v ON LOWER(v.name) = LOWER(ua.event_name)
+            WHERE ua.user_id = %s
+            GROUP BY v.id, v.name
+            ORDER BY last_attended DESC, v.name ASC
+            """,
+            (current_user_id,),
         )
-        row = cursor.fetchone()
-        if not row:
-            print("Event not found. Please check the name and try again.")
-            cursor.close()
-            conn.close()
+        attended = cursor.fetchall()
+
+        if not attended:
+            print("You do not have any attended events yet.")
+            print(
+                "Try selecting an event and choosing itinerary/reservation/ticket first."
+            )
             return
 
-        venue_id, venue_name = row
+        print("\nRate a past attended event:\n")
+        for i, row in enumerate(attended, start=1):
+            print(f"  {i}. {row['name']}")
+        print(f"  {len(attended) + 1}. Return to Main Menu")
 
-        # Upsert: insert or overwrite existing rating
+        selected = None
+        while True:
+            choice = input("\n  Enter event number: ").strip()
+            if not choice.isdigit():
+                print("  Please enter a valid number.")
+                continue
+            idx = int(choice)
+            if idx == len(attended) + 1:
+                print("  Returning to Main Menu...")
+                return
+            if 1 <= idx <= len(attended):
+                selected = attended[idx - 1]
+                break
+            print(f"  Please enter a number between 1 and {len(attended) + 1}.")
+
+        while True:
+            rating_raw = input("Enter rating (1-10): ").strip()
+            if rating_raw.isdigit() and 1 <= int(rating_raw) <= 10:
+                rating = int(rating_raw)
+                break
+            print("Invalid rating. Please enter a number between 1 and 10.")
+
         cursor.execute(
             """INSERT INTO venue_ratings (venue_id, user_id, rating)
                VALUES (%s, %s, %s)
                ON DUPLICATE KEY UPDATE rating = VALUES(rating)""",
-            (venue_id, current_user_id, rating),
+            (selected["id"], current_user_id, rating),
         )
         conn.commit()
-        print(f"Rating saved for {venue_name}.")
+        print(f"Rating saved for {selected['name']}.")
 
     except Exception as e:
         print(f"  ERROR: Could not save rating: {e}")
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()

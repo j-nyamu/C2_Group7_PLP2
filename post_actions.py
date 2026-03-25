@@ -6,7 +6,7 @@ def show_post_actions_menu(matches, user_id):
 
     if not matches:
         print("No matches available")
-        return
+        return "main_menu"
 
     # PART 1 - SELECT AN EVENT
     print("\nChoose your preferred activity\n\n")
@@ -35,16 +35,16 @@ def show_post_actions_menu(matches, user_id):
         action = input("\n  Enter your action choice (1-4): ").strip()
         if action == "1":
             handle_itinerary(selected_event, user_id)
-            break
+            return "main_menu"
         elif action == "2":
             handle_reservation(selected_event, user_id)
-            break
+            return "main_menu"
         elif action == "3":
             handle_tickets(selected_event, user_id)
-            break
+            return "main_menu"
         elif action == "4":
             print("  Returning to Main Menu...")
-            break
+            return "main_menu"
         else:
             print("  Invalid choice.")
 
@@ -52,7 +52,7 @@ def show_post_actions_menu(matches, user_id):
 # PART 3 - SAVE THE ACTION TO DATABASE
 def add_event_to_history_grouped(user_id, event_name, action_type):
     try:
-        conn   = get_connection()
+        conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
             """INSERT INTO user_actions (user_id, action_type, event_name)
@@ -67,18 +67,22 @@ def add_event_to_history_grouped(user_id, event_name, action_type):
 
 
 def handle_itinerary(event, user_id):
-    add_event_to_history_grouped(user_id, event['name'], "Itinerary")
-    print(f"\n\033[32m  [Action] {event['name']} has been added to your itinerary!\n\033[0m")
+    add_event_to_history_grouped(user_id, event["name"], "Itinerary")
+    print(
+        f"\n\033[32m  [Action] {event['name']} has been added to your itinerary!\n\033[0m"
+    )
     print("\033[32m  Thank you for using KultureKonnect! \033[0m \n\n")
 
 
 def handle_reservation(event, user_id):
-    add_event_to_history_grouped(user_id, event['name'], "Reservation")
+    add_event_to_history_grouped(user_id, event["name"], "Reservation")
     print(f"\n\033[32m  [Action] Reservation confirmed for {event['name']}.\n\033[0m")
     print("\033[32m  Thank you for using KultureKonnect! \033[0m \n\n")
 
 
 def handle_tickets(event, user_id):
-    add_event_to_history_grouped(user_id, event['name'], "Ticket")
-    print(f"\n\033[32m  [Action] You've successfully bought tickets for {event['name']}!\n\033[0m")
+    add_event_to_history_grouped(user_id, event["name"], "Ticket")
+    print(
+        f"\n\033[32m  [Action] You've successfully bought tickets for {event['name']}!\n\033[0m"
+    )
     print("\033[32m  Thank you for using KultureKonnect! \033[0m \n\n")
