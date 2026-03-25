@@ -3,13 +3,13 @@ from db import get_connection
 
 
 def save_events_rating(current_user_id):
-    """
-    Prompt the user for an event name and rating, then save to the database.
-    current_user_id: the integer id of the logged-in user (from users table).
-    One rating per user per venue; re-rating overwrites the previous value.
-    """
+
+    # Prompt the user for an event name and rating, then save to the database.
+    # current_user_id: the integer id of the logged-in user (from users table).
+    # One rating per user per venue; re-rating overwrites the previous value.
+
     event_name = input("Enter event name: ").strip()
-    rating     = input("Enter rating (1-10): ").strip()
+    rating = input("Enter rating (1-10): ").strip()
 
     if not rating.isdigit() or not (1 <= int(rating) <= 10):
         print("Invalid rating. Please enter a number between 1 and 10.")
@@ -18,7 +18,7 @@ def save_events_rating(current_user_id):
     rating = int(rating)
 
     try:
-        conn   = get_connection()
+        conn = get_connection()
         cursor = conn.cursor()
 
         # Look up venue by name (case-insensitive)

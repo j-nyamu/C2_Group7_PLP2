@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""
-seed_ratings.py - Widen the venue_ratings CHECK constraint to 1-10,
-then insert random ratings for 9 randomly chosen venues.
 
-Run once:
-    python seed_ratings.py
-"""
 
 import random
 from db import get_connection
@@ -38,7 +32,7 @@ def widen_constraint(cursor):
 
 
 def seed():
-    conn   = get_connection()
+    conn = get_connection()
     cursor = conn.cursor()
 
     # Widen the CHECK constraint
@@ -59,7 +53,9 @@ def seed():
     cursor.execute("SELECT id FROM users")
     user_ids = [r[0] for r in cursor.fetchall()]
     if not user_ids:
-        print("No users found in the database — cannot insert ratings (need a user_id).")
+        print(
+            "No users found in the database — cannot insert ratings (need a user_id)."
+        )
         cursor.close()
         conn.close()
         return
@@ -68,7 +64,7 @@ def seed():
     inserted = 0
     for venue_id, venue_name in chosen:
         user_id = random.choice(user_ids)
-        rating  = random.randint(1, 10)
+        rating = random.randint(1, 10)
         cursor.execute(
             """INSERT INTO venue_ratings (venue_id, user_id, rating)
                VALUES (%s, %s, %s)
