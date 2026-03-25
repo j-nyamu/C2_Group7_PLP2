@@ -11,10 +11,29 @@ def pick_from_menu(prompt, options):
         choice = input("  Enter the number of your choice: ").strip()
         if choice.isdigit() and 1 <= int(choice) <= len(options):
             return options[int(choice) - 1]
-        print(f"  That is not a valid choice. Please enter a number between 1 and {len(options)}.")
+        print(
+            f"  That is not a valid choice. Please enter a number between 1 and {len(options)}."
+        )
+
+    # -- Main Menu & preferences functions -------------------------------------------------
 
 
-# -- Main preferences function -------------------------------------------------
+def load_main_menu():
+    print("\n" + "=" * 45)
+    print("          MAIN MENU")
+    print("=" * 45)
+    print("  What would you like to do today.\n")
+    print("  1. Set your preferences")
+    print("  2. Rate past attended events")
+    print("  3. Exit")
+
+    while True:
+        choice = input("\n Enter your choice (1-3): ").strip()
+        if choice in ("1", "2", "3"):
+            return choice
+        print(" Invalid choice. Please enter 1, 2 or 3")
+
+
 def get_preferences():
     print("\n" + "=" * 45)
     print("          SET YOUR PREFERENCES")
