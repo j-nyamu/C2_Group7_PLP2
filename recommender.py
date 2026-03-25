@@ -1,36 +1,58 @@
-#!bin/usr/python3
+#!/usr/bin/env python3
 import json
+import os
+
+EVENTS_FILE = "venue_database.json"
 
 
-# Read .json file
+# -- Load events safely --------------------------------------------------------
 def load_events():
-    with open("venue_database.json", "r") as file:
-        events = json.load(file)
-    return events
+    """Load the venue database. Returns empty list if file is missing or broken."""
+    if not os.path.exists(EVENTS_FILE):
+        print(f"  WARNING: The events file '{EVENTS_FILE}' could not be found. Please make sure it is in the project folder.")
+        return []
+    try:
+        with open(EVENTS_FILE, "r") as file:
+            events = json.load(file)
+        if not isinstance(events, list):
+            print("  WARNING: The events file does not contain a valid list of events.")
+            return []
+        return events
+    except json.JSONDecodeError:
+        print("  WARNING: The events file appears to be corrupted and could not be read.")
+        return []
 
 
-# Check budget function
+# -- Budget comparison ---------------------------------------------------------
 def budget_fits(event_budget, user_budget):
+    """Return True if the event budget is within the user's budget."""
     levels = {"Low": 1, "Medium": 2, "High": 3}
-    return levels[event_budget] <= levels[user_budget]
+    event_level = levels.get(event_budget, 0)
+    user_level  = levels.get(user_budget, 0)
+    return event_level <= user_level
 
 
-# Recommendation Filter Function
+# -- Recommendation filter -----------------------------------------------------
 def get_recommendations(profile, preferences, events):
+    """
+    Filter events against the user's profile and preferences.
+    All comparisons are case-insensitive and type-safe.
+    """
     results = []
+    required_event_keys = {"city", "budget", "type", "min_age", "time", "name"}
+
     for event in events:
-        if event["city"].lower() != profile["city"].lower():
+        if not required_event_keys.issubset(event.keys()):
             continue
-        if not budget_fits(event["budget"], profile["budget"]):
+        if event["city"].strip().lower() != str(profile.get("city", "")).strip().lower():
             continue
-        if event["type"] not in preferences["activity"]:  # Confirm with Karyna's code
+        if not budget_fits(event["budget"], profile.get("budget", "Low")):
             continue
-        if event["min_age"] > profile["age"]:
+        if event["type"].strip().lower() != preferences.get("activity", "").strip().lower():
             continue
-        if (
-            "preferred_times" in preferences
-            and event["time"] not in preferences["preferred_times"]
-        ):
+        if event["min_age"] > int(profile.get("age", 0)):
+            continue
+        if event["time"].strip().lower() != preferences.get("time", "").strip().lower():
             continue
 
     def avg_rating(event):
@@ -44,21 +66,4 @@ def get_recommendations(profile, preferences, events):
         )  # Sort by average rating, highest first
         results.append(event)
 
-    if len(results) == 0:
-        print(
-            "No events matched your preferences. Please broaden your search preferences"
-        )
     return results
-
-
-# # Fake profile (Person 1 will build the real version)
-# test_profile = {"name": "Alice", "age": 20, "city": "Kigali", "budget": "Medium"}
-
-# # Fake preferences (Person 2 will build the real version)
-# test_preferences = {"activity_types": ["Music", "Games"]}
-
-# events = load_events()
-# matches = get_recommendations(test_profile, test_preferences, events)
-
-# for match in matches:
-#     print(f"{match['name']} - {match['type']} ({match['budget']} budget)")
