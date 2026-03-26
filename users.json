@@ -2,5 +2,9 @@
   "samhez": {
     "salt": "fbaa8bb93c0cf4ce94ef34b9b9ed3b2a",
     "password": "2f07034c97f5db6a433849c9bdfa47bbe3721fb72590938c45d3e4d4fd9ea650"
+  },
+  "sami": {
+    "salt": "56a2a6610e3dd434f52b64d388c3a753",
+    "password": "63dccb55bcde1a59a26a82c27c87da3d6d21da930cdebf40244c551c8f44878b"
   }
 }
