@@ -18,34 +18,13 @@ def migrate():
     conn = get_connection()
     cursor = conn.cursor()
 
-    users_migrated    = 0
     profiles_migrated = 0
     actions_migrated  = 0
     venues_migrated   = 0
     ratings_migrated  = 0
 
     # ------------------------------------------------------------------
-    # 1. Migrate users.json -> users table
-    # ------------------------------------------------------------------
-    print("Migrating users...")
-    if os.path.exists("users.json"):
-        with open("users.json", "r") as f:
-            users_data = json.load(f)
-
-        for username, creds in users_data.items():
-            cursor.execute(
-                "INSERT IGNORE INTO users (username, salt, password) VALUES (%s, %s, %s)",
-                (username, creds["salt"], creds["password"]),
-            )
-            if cursor.rowcount:
-                users_migrated += 1
-
-        conn.commit()
-    else:
-        print("  users.json not found — skipping.")
-
-    # ------------------------------------------------------------------
-    # 2. Migrate profiles/*.json -> profiles + user_actions tables
+    # 1. Migrate profiles/*.json -> profiles + user_actions tables
     # ------------------------------------------------------------------
     print("Migrating profiles and actions...")
     for profile_path in glob.glob(os.path.join("profiles", "*.json")):
@@ -152,7 +131,6 @@ def migrate():
     conn.close()
 
     print("\nMigration complete!")
-    print(f"  Users    : {users_migrated}")
     print(f"  Profiles : {profiles_migrated}")
     print(f"  Actions  : {actions_migrated}")
     print(f"  Venues   : {venues_migrated}")
