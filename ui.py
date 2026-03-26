@@ -9,6 +9,9 @@ run sudo apt update,
 then run sudo apt install python3-pip
 then run sudo apt install python3-colorama
 to confirm if it's installed, run python3 -c "import colorama; print('works')"
+
+this module replaces all the plain print statements in the other modules with styled versions,
+ and provides reusable building blocks for consistent formatting across the app.
 """
 
 from colorama import init, Fore, Back, Style
