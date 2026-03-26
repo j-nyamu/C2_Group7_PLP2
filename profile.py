@@ -2,12 +2,10 @@
 """
 profile.py - Per-user profile creation and loading.
 
-Profiles are stored in profiles/<username>.json so each user
-has their own separate data.
+Profiles are stored in the MySQL `profiles` table, keyed by user_id.
 """
 
-import json
-import os
+from db import get_connection
 
 
 # -- Reusable helpers ----------------------------------------------------------
@@ -52,9 +50,9 @@ def get_age_input():
 
 # -- Profile creation ----------------------------------------------------------
 
-def create_profile(profile_file):
+def create_profile(user_id):
     """
-    Collect profile details from the user and save to profile_file.
+    Collect profile details from the user and save to the database.
     Returns the profile dict.
     """
     print("\n" + "=" * 45)
@@ -72,7 +70,7 @@ def create_profile(profile_file):
         "What is your typical budget for activities?",
         ["Low", "Medium", "High"],
     )
-    city   = get_text_input("What city or country are you based in? ")
+    city = get_text_input("What city or country are you based in? ")
 
     user_profile = {
         "name":   name,
@@ -82,14 +80,20 @@ def create_profile(profile_file):
         "city":   city,
     }
 
-    os.makedirs(os.path.dirname(profile_file), exist_ok=True)
-
     try:
-        with open(profile_file, "w") as f:
-            json.dump(user_profile, f, indent=2)
+        conn   = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """INSERT INTO profiles (user_id, name, age, gender, budget, city)
+               VALUES (%s, %s, %s, %s, %s, %s)""",
+            (user_id, name, age, gender, budget, city),
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
         print(f"\n  Your profile has been saved. Welcome to KultureKonnect, {name}!")
-    except OSError as e:
-        print(f"\n  WARNING: Could not save your profile to disk: {e}")
+    except Exception as e:
+        print(f"\n  WARNING: Could not save your profile: {e}")
         print("  Your session will continue, but your details will not be remembered next time.")
 
     return user_profile
@@ -97,48 +101,72 @@ def create_profile(profile_file):
 
 # -- Profile loading -----------------------------------------------------------
 
-def load_profile(profile_file):
+def load_profile(user_id):
     """
-    Load a user's profile from profile_file.
-    Returns the profile dict, or None if missing / corrupted / incomplete.
+    Load a user's profile from the database.
+    Returns the profile dict, or None if not found.
     """
-    if not os.path.exists(profile_file):
-        return None
     try:
-        with open(profile_file, "r") as f:
-            user_profile = json.load(f)
+        conn   = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT name, age, gender, budget, city FROM profiles WHERE user_id = %s",
+            (user_id,),
+        )
+        row = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if not row:
+            return None
         required = {"name", "age", "gender", "budget", "city"}
-        if not required.issubset(user_profile.keys()):
+        if not required.issubset(row.keys()):
             print("  Your saved profile is missing some information. Let us fill it in again.")
             return None
-        return user_profile
-    except (json.JSONDecodeError, OSError):
-        print("  We could not read your saved profile. Let us start fresh.")
+        return dict(row)
+    except Exception as e:
+        print(f"  We could not read your saved profile: {e}. Let us start fresh.")
         return None
 
 
 # -- Public entry point --------------------------------------------------------
 
-def get_or_create_profile(username, profile_file):
+def get_or_create_profile(username, user_id):
     """
-    Load the profile for `username` if it exists, otherwise create it.
+    Load the profile for `user_id` if it exists, otherwise create it.
     """
-    user_profile = load_profile(profile_file)
+    user_profile = load_profile(user_id)
 
     if user_profile:
         print(f"\n  Profile loaded. Hello again, {user_profile['name']}!")
     else:
         print(f"\n  Hello {username}, it looks like you have not set up your profile yet.")
-        user_profile = create_profile(profile_file)
+        user_profile = create_profile(user_id)
 
     return user_profile
 
-# -- Saving profile --------------------------------------------------------
 
-def save_profile(profile_file, user_profile):
-    # Write user_profile dictionary back to the profile_file JSON 
+# -- Save profile (core fields only) ------------------------------------------
+
+def save_profile(user_id, user_profile):
+    """Update the core profile fields in the database."""
     try:
-        with open(profile_file, "w") as f:
-            json.dump(user_profile, f, indent=2)
-    except OSError as e:
+        conn   = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """UPDATE profiles
+               SET name = %s, age = %s, gender = %s, budget = %s, city = %s
+               WHERE user_id = %s""",
+            (
+                user_profile.get("name"),
+                user_profile.get("age"),
+                user_profile.get("gender"),
+                user_profile.get("budget"),
+                user_profile.get("city"),
+                user_id,
+            ),
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
         print(f"  WARNING: Could not save profile: {e}")

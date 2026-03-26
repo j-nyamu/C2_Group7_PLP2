@@ -1,26 +1,5 @@
 #!/usr/bin/env python3
-import json
-import os
-
-EVENTS_FILE = "venue_database.json"
-
-
-# -- Load events safely --------------------------------------------------------
-def load_events():
-    """Load the venue database. Returns empty list if file is missing or broken."""
-    if not os.path.exists(EVENTS_FILE):
-        print(f"  WARNING: The events file '{EVENTS_FILE}' could not be found. Please make sure it is in the project folder.")
-        return []
-    try:
-        with open(EVENTS_FILE, "r") as file:
-            events = json.load(file)
-        if not isinstance(events, list):
-            print("  WARNING: The events file does not contain a valid list of events.")
-            return []
-        return events
-    except json.JSONDecodeError:
-        print("  WARNING: The events file appears to be corrupted and could not be read.")
-        return []
+from db import get_connection
 
 
 # -- Budget comparison ---------------------------------------------------------
@@ -30,6 +9,40 @@ def budget_fits(event_budget, user_budget):
     event_level = levels.get(event_budget, 0)
     user_level  = levels.get(user_budget, 0)
     return event_level <= user_level
+
+
+# -- Load events from MySQL ----------------------------------------------------
+def load_events():
+    """
+    Load all venues from the database with their average rating.
+    Returns a list of dicts using the same keys the rest of the app expects.
+    """
+    try:
+        conn   = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT v.name,
+                   v.type,
+                   v.city,
+                   v.budget,
+                   v.noise,
+                   v.min_age,
+                   v.time_of_day  AS time,
+                   v.description,
+                   COALESCE(AVG(r.rating), 0) AS avg_rating
+            FROM   venues v
+            LEFT JOIN venue_ratings r ON r.venue_id = v.id
+            GROUP  BY v.id
+            """
+        )
+        events = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return events
+    except Exception as e:
+        print(f"  WARNING: Could not load events from database: {e}")
+        return []
 
 
 # -- Recommendation filter -----------------------------------------------------
@@ -56,4 +69,5 @@ def get_recommendations(profile, preferences, events):
             continue
         results.append(event)
 
+    results.sort(key=lambda e: e.get("avg_rating", 0), reverse=True)
     return results

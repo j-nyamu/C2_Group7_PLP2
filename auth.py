@@ -2,48 +2,19 @@
 """
 auth.py - Register and login for KultureKonnect.
 
-Each user gets:
-  - An entry in users.json  (username + hashed password)
-  - Their own profile file  profiles/<username>.json
-
+Credentials are stored in the MySQL `users` table.
 Passwords are hashed with SHA-256 + a per-user salt so they are
 never stored in plain text.
 """
 
-import json
-import os
 import hashlib
 import secrets
-
-USERS_FILE   = "users.json"
-PROFILES_DIR = "profiles"
+import mysql.connector
+import time
+from db import get_connection
 
 
 # -- Internal helpers ----------------------------------------------------------
-
-def _ensure_dirs():
-    """Make sure the profiles/ folder exists."""
-    os.makedirs(PROFILES_DIR, exist_ok=True)
-
-
-def _load_users():
-    """Return the users dict, or {} if the file is missing / corrupted."""
-    if not os.path.exists(USERS_FILE):
-        return {}
-    try:
-        with open(USERS_FILE, "r") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return {}
-
-
-def _save_users(users):
-    """Write the users dict back to disk."""
-    try:
-        with open(USERS_FILE, "w") as f:
-            json.dump(users, f, indent=2)
-    except OSError as e:
-        print(f"  ERROR: Could not save user data: {e}")
 
 
 def _hash_password(password, salt=None):
@@ -84,15 +55,22 @@ def _get_password(confirm=False):
         return password
 
 
-# -- Public: profile path for a given user ------------------------------------
+# -- Public: get user id for a given username ----------------------------------
 
-def profile_path(username):
-    """Return the path to this user's profile JSON file."""
-    _ensure_dirs()
-    return os.path.join(PROFILES_DIR, f"{username}.json")
+
+def get_user_id(username):
+    """Return the integer id for this username from the users table."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
+    row = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return row[0] if row else None
 
 
 # -- Public: register ---------------------------------------------------------
+
 
 def register():
     """
@@ -104,30 +82,42 @@ def register():
     print("=" * 45)
     print("  Type 'back' at any prompt to return to the main menu.\n")
 
-    users = _load_users()
-
     while True:
         username = _get_username()
         if username == "back":
             return None
-        if username in users:
-            print(f"  Sorry, the username '{username}' is already taken. Please choose a different one.")
-        else:
-            break
 
-    password = _get_password(confirm=True)
-    if password.lower() == "back":
-        return None
+        # Check for duplicate by attempting INSERT and catching IntegrityError
+        password = _get_password(confirm=True)
+        if password.lower() == "back":
+            return None
 
-    salt, hashed = _hash_password(password)
-    users[username] = {"salt": salt, "password": hashed}
-    _save_users(users)
-
-    print(f"\n  Your account has been created successfully! You can now log in as '{username}'.")
-    return username
+        salt, hashed = _hash_password(password)
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO users (username, salt, password) VALUES (%s, %s, %s)",
+                (username, salt, hashed),
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+            print(
+                f"\n  Your account has been created successfully! You can now log in as '{username}'."
+            )
+            return username
+        except mysql.connector.errors.IntegrityError:
+            print(
+                f"  Sorry, the username '{username}' is already taken. Please choose a different one."
+            )
+        except Exception as e:
+            print(f"  ERROR: Could not create account: {e}")
+            return None
 
 
 # -- Public: login ------------------------------------------------------------
+
 
 def login():
     """
@@ -138,7 +128,6 @@ def login():
     print("                  LOG IN")
     print("=" * 45)
 
-    users = _load_users()
     MAX_ATTEMPTS = 3
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
@@ -146,28 +135,49 @@ def login():
         username = input("  Username: ").strip().lower()
         password = input("  Password: ").strip()
 
-        if username not in users:
-            print("  We could not find an account with that username. Please check and try again.")
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT salt, password FROM users WHERE username = %s", (username,)
+            )
+            row = cursor.fetchone()
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print(f"  ERROR: Could not reach database: {e}")
+            return None
+
+        if not row:
+            print(
+                "  We could not find an account with that username. Please check and try again."
+            )
             continue
 
-        stored    = users[username]
-        salt      = stored["salt"]
+        salt, stored_hash = row
         _, hashed = _hash_password(password, salt)
 
-        if hashed == stored["password"]:
-            print(f"\n  Good to have you back, {username}! Your session is now active.")
+        if hashed == stored_hash:
+            print(f"\n Login Successful")
+            time.sleep = 3
+            print(f"\n  Loading your session. Please wait . . .")
             return username
         else:
             remaining = MAX_ATTEMPTS - attempt
             if remaining > 0:
-                print(f"  That password is incorrect. You have {remaining} attempt(s) remaining.")
+                print(
+                    f"  That password is incorrect. You have {remaining} attempt(s) remaining."
+                )
             else:
-                print("  You have used all your login attempts. Please return to the main menu and try again.")
+                print(
+                    "  You have used all your login attempts. Please return to the main menu and try again."
+                )
 
     return None
 
 
 # -- Public: auth gate --------------------------------------------------------
+
 
 def auth_gate():
     """
