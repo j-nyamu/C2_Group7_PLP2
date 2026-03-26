@@ -5,6 +5,8 @@ auth.py - Register and login for KultureKonnect.
 Credentials are stored in the MySQL `users` table.
 Passwords are hashed with SHA-256 + a per-user salt so they are
 never stored in plain text.
+
+using the colorama ui functions swaps the print to ui.info, ui.error, ui.success, etc. for better formatting and colour.
 """
 
 import hashlib
@@ -12,7 +14,7 @@ import secrets
 import mysql.connector
 import time
 from db import get_connection
-
+import ui
 
 # -- Internal helpers ----------------------------------------------------------
 
@@ -31,11 +33,11 @@ def _hash_password(password, salt=None):
 def _get_username():
     """Prompt for a non-empty, lowercase, alphanumeric username."""
     while True:
-        username = input("  Username: ").strip().lower()
+        username = input(ui.Fore.YELLOW + "  ▶  Username: " + ui.RESET).strip().lower()
         if not username:
-            print("  Please enter a username. This field cannot be left blank.")
+             ui.error("Please enter a username. This field cannot be left blank.")
         elif not username.replace("_", "").isalnum():
-            print("  Usernames may only contain letters, numbers, and underscores.")
+            ui.error("Usernames may only contain letters, numbers, and underscores.")
         else:
             return username
 
@@ -43,14 +45,14 @@ def _get_username():
 def _get_password(confirm=False):
     """Prompt for a password (min 6 chars). If confirm=True ask twice."""
     while True:
-        password = input("  Password: ").strip()
+        password = input(ui.Fore.YELLOW + "  ▶  Password: " + ui.RESET).strip()
         if len(password) < 6:
-            print("  Your password is too short. Please use at least 6 characters.")
+            ui.error("Your password is too short. Please use at least 6 characters.")
             continue
         if confirm:
-            password2 = input("  Confirm password: ").strip()
+            password2 = input(ui.Fore.YELLOW + "  ▶  Confirm password: " + ui.RESET).strip()
             if password != password2:
-                print("  The passwords you entered do not match. Please try again.")
+                ui.error("The passwords you entered do not match. Please try again.")
                 continue
         return password
 
@@ -77,10 +79,7 @@ def register():
     Walk the user through creating an account.
     Returns the new username on success, or None if they cancel.
     """
-    print("\n" + "=" * 45)
-    print("            CREATE AN ACCOUNT")
-    print("=" * 45)
-    print("  Type 'back' at any prompt to return to the main menu.\n")
+    ui.register_screen()
 
     while True:
         username = _get_username()
@@ -103,16 +102,14 @@ def register():
             conn.commit()
             cursor.close()
             conn.close()
-            print(
-                f"\n  Your account has been created successfully! You can now log in as '{username}'."
+            ui.success(
+                f"  Your account has been created successfully! You can now log in as '{username}'."
             )
             return username
         except mysql.connector.errors.IntegrityError:
-            print(
-                f"  Sorry, the username '{username}' is already taken. Please choose a different one."
-            )
+            ui.error(f"The username '{username}' is already taken. Please choose another.")
         except Exception as e:
-            print(f"  ERROR: Could not create account: {e}")
+            ui.error(f"  ERROR: Could not create account: {e}")
             return None
 
 
@@ -124,16 +121,14 @@ def login():
     Ask for username + password.
     Returns the username on success, or None after 3 failed attempts.
     """
-    print("\n" + "=" * 45)
-    print("                  LOG IN")
-    print("=" * 45)
+    ui.login_screen()
 
     MAX_ATTEMPTS = 3
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        print(f"\n  Attempt {attempt} of {MAX_ATTEMPTS}")
-        username = input("  Username: ").strip().lower()
-        password = input("  Password: ").strip()
+        print(ui.DIM + f"\n  Attempt {attempt} of {MAX_ATTEMPTS}")
+        username = input(ui.Fore.YELLOW + "  ▶  Username: " + ui.RESET).strip().lower()
+        password = input(ui.Fore.YELLOW + "  ▶  Password: " + ui.RESET).strip()
 
         try:
             conn = get_connection()
@@ -145,11 +140,11 @@ def login():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"  ERROR: Could not reach database: {e}")
+            ui.error(f"  ERROR: Could not reach database: {e}")
             return None
 
         if not row:
-            print(
+            ui.error(
                 "  We could not find an account with that username. Please check and try again."
             )
             continue
@@ -158,18 +153,18 @@ def login():
         _, hashed = _hash_password(password, salt)
 
         if hashed == stored_hash:
-            print(f"\n Login Successful")
-            time.sleep = 3
-            print(f"\n  Loading your session. Please wait . . .")
+            ui.success(f"\n Login Successful!  Loading your session. Please wait . . .")
+            time.sleep(3)
+            
             return username
         else:
             remaining = MAX_ATTEMPTS - attempt
             if remaining > 0:
-                print(
+                ui.warn(
                     f"  That password is incorrect. You have {remaining} attempt(s) remaining."
                 )
             else:
-                print(
+                ui.error(
                     "  You have used all your login attempts. Please return to the main menu and try again."
                 )
 
@@ -184,15 +179,11 @@ def auth_gate():
     Show the opening menu and return a logged-in username,
     or None if the user chooses to exit.
     """
+    ui.welcome_screen()
     while True:
-        print("\n" + "=" * 45)
-        print("       WELCOME TO KULTURE KONNECT")
-        print("=" * 45)
-        print("  1. Log In")
-        print("  2. Register")
-        print("  3. Exit")
+        ui.auth_menu()
 
-        choice = input("\n  Choose an option (1-3): ").strip()
+        choice = input(ui.Fore.YELLOW + "  ▶  Choose an option (1-3): " + ui.RESET).strip()
 
         if choice == "1":
             username = login()
@@ -202,14 +193,14 @@ def auth_gate():
         elif choice == "2":
             username = register()
             if username:
-                print("\n  Great! Please log in with your new account to continue.")
+                ui.info("Great! Please log in with your new account to continue.")
                 username = login()
                 if username:
                     return username
 
         elif choice == "3":
-            print("\n  Thank you for using KultureKonnect. See you next time!")
+            ui.goodbye()
             return None
 
         else:
-            print("  That is not a valid option. Please enter 1, 2, or 3.")
+            ui.error("  That is not a valid option. Please enter 1, 2, or 3.")
