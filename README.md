@@ -5,6 +5,9 @@ A terminal-based cultural event recommender. Users register or log in, build a p
 ## Quick Start
 
 ```bash
+set -a
+source .env
+set +a
 python3 kulture_konnect.py
 ```
 
@@ -158,13 +161,13 @@ kulture_konnect.py
 
 ## Database Schema (quick reference)
 
-| Table | Purpose |
-|---|---|
-| `users` | Credentials — username, salt, hashed password |
-| `profiles` | Per-user details — name, age, gender, budget, city |
-| `venues` | Event/venue catalogue — type, city, budget, noise, min_age, time_of_day |
-| `user_actions` | History of itineraries / reservations / tickets per user |
-| `venue_ratings` | 1–10 ratings; one row per (venue, user) pair |
+| Table           | Purpose                                                                 |
+| --------------- | ----------------------------------------------------------------------- |
+| `users`         | Credentials — username, salt, hashed password                           |
+| `profiles`      | Per-user details — name, age, gender, budget, city                      |
+| `venues`        | Event/venue catalogue — type, city, budget, noise, min_age, time_of_day |
+| `user_actions`  | History of itineraries / reservations / tickets per user                |
+| `venue_ratings` | 1–10 ratings; one row per (venue, user) pair                            |
 
 ---
 
