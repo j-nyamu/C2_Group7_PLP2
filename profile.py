@@ -6,31 +6,25 @@ Profiles are stored in the MySQL `profiles` table, keyed by user_id.
 """
 
 from db import get_connection
+import ui
 
 
 # -- Reusable helpers ----------------------------------------------------------
 
 def pick_from_menu(prompt, options):
     """Display a numbered list; loop until a valid number is entered."""
-    print(f"\n{prompt}")
-    for i, option in enumerate(options, start=1):
-        print(f"  {i}. {option}")
-    while True:
-        choice = input("  Enter the number of your choice: ").strip()
-        if choice.isdigit() and 1 <= int(choice) <= len(options):
-            return options[int(choice) - 1]
-        print(f"  That is not a valid choice. Please enter a number between 1 and {len(options)}.")
+    return ui.pick_menu(prompt, options)
 
 
 def get_text_input(prompt, letters_only=False):
     """Keep asking until the user enters a non-empty value."""
     while True:
-        value = input(f"  {prompt}").strip()
+        value = input(ui.Fore.YELLOW + f"  ▶  {prompt}" + ui.RESET).strip()
         if not value:
-            print("  This field cannot be empty. Please enter a value.")
+            ui.error("  This field cannot be empty. Please enter a value.")
             continue
         if letters_only and not all(c.isalpha() or c.isspace() for c in value):
-            print("  Please use letters only. Numbers and symbols are not accepted here.")
+            ui.error("  Please use letters only. Numbers and symbols are not accepted here.")
             continue
         return value
 
@@ -38,14 +32,14 @@ def get_text_input(prompt, letters_only=False):
 def get_age_input():
     """Keep asking until a whole number between 5 and 120 is entered."""
     while True:
-        value = input("  What is your age? ").strip()
+        value = input(ui.Fore.YELLOW + "  ▶  What is your age? " + ui.RESET).strip()
         if value.isdigit():
             age = int(value)
             if 5 <= age <= 120:
                 return age
-            print("  Please enter a realistic age between 5 and 120.")
+            ui.error("  Please enter a realistic age between 5 and 120.")
         else:
-            print("  Age must be a whole number, for example 21. Please try again.")
+            ui.error("  Age must be a whole number, for example 21. Please try again.")
 
 
 # -- Profile creation ----------------------------------------------------------
@@ -55,18 +49,15 @@ def create_profile(user_id):
     Collect profile details from the user and save to the database.
     Returns the profile dict.
     """
-    print("\n" + "=" * 45)
-    print("          COMPLETE YOUR PROFILE")
-    print("=" * 45)
-    print("  Let us get to know you a little better.\n")
+    ui.profile_header()
 
     name   = get_text_input("What is your full name? ", letters_only=True)
     age    = get_age_input()
-    gender = pick_from_menu(
+    gender = ui.pick_menu(
         "What is your gender?",
         ["Male", "Female", "Non-binary", "Prefer not to say"],
     )
-    budget = pick_from_menu(
+    budget = ui.pick_menu(
         "What is your typical budget for activities?",
         ["Low", "Medium", "High"],
     )
@@ -93,8 +84,8 @@ def create_profile(user_id):
         conn.close()
         print(f"\n  Your profile has been saved. Welcome to KultureKonnect, {name}!")
     except Exception as e:
-        print(f"\n  WARNING: Could not save your profile: {e}")
-        print("  Your session will continue, but your details will not be remembered next time.")
+        ui.warn(f"Could not save your profile: {e}")
+        ui.info("  Your session will continue, but your details will not be remembered next time.")
 
     return user_profile
 
@@ -120,11 +111,11 @@ def load_profile(user_id):
             return None
         required = {"name", "age", "gender", "budget", "city"}
         if not required.issubset(row.keys()):
-            print("  Your saved profile is missing some information. Let us fill it in again.")
+            ui.info("  Your saved profile is missing some information. Let us fill it in again.")
             return None
         return dict(row)
     except Exception as e:
-        print(f"  We could not read your saved profile: {e}. Let us start fresh.")
+        ui.warn(f"  We could not read your saved profile: {e}. Let us start fresh.")
         return None
 
 
@@ -137,9 +128,9 @@ def get_or_create_profile(username, user_id):
     user_profile = load_profile(user_id)
 
     if user_profile:
-        print(f"\n  Profile loaded. Hello again, {user_profile['name']}!")
+        ui.profile_loaded(user_profile["name"])
     else:
-        print(f"\n  Hello {username}, it looks like you have not set up your profile yet.")
+        ui.info(f"\n  Hello {username}, it looks like you have not set up your profile yet.")
         user_profile = create_profile(user_id)
 
     return user_profile
@@ -169,4 +160,4 @@ def save_profile(user_id, user_profile):
         cursor.close()
         conn.close()
     except Exception as e:
-        print(f"  WARNING: Could not save profile: {e}")
+        ui.warn(f"  WARNING: Could not save profile: {e}")
